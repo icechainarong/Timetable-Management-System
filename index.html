@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Timetable Management System</title>
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAAjBJREFUWEfFlz9oFEEUxn/vfzO7u00wGASCiIqFoCAsLBbBQlFCkCBYBCsFsdhfwUbBQlFBLGwsFEFCUBBsLGyrIAjYpBCFkOABK0Sws/vNzr7bN3h2d5s9CUfCzNz73v3mN/PNPBf450A8Hg+y3e55J+0D4E4CgYBQKBReiUTiT1r531k3Gg32+/2tWmu5v+329vZW/X5/T3G/zBwALhWLxX0xGPyPPM8T6bRtA/BfAObkPzI+Pj601+tBmqbA8zzlPM8KAFQqlR1EIlErgM9Vp9PZp1KpYf39/X2dYRgJAEymaZo+h0TSRvX4+PjcBwD0+32y3W6qVCqV1/Pz8+dTU1M3ALhVrdvtlqo+KxQKRgHYn3K73e/f7/eD7e3taq1WC0VR/B4A6A/bE2zpb1zX3Uyn0y8BOM/sNpsNgV3QzGYzd7lc7kqlkv9+v19yXfev53nvA3CPwA+pVCqXlUqlYHd3d09NTU3tA7B+A7+j0ejc3Nzcz/2y0+nc1Gq1IJfLZblcbi53AByA36lUqlgmk4lUFAVPKpV+lUqlLgC7A/7U6XT2TUxM/DwwMPDdB+BCAv4UCoX3hBBWURS9pmkaYRiJRqOxySQSCQCq1Wo35XK53gdwB4H/Uq1Wu9XpdD5pmuapVCqGZVnebrc7z/M2AKhWq30aGxtbB2Bbgf+h0+l8Pjs7+0iSpB/w3wA8Uv/m48yQGAAAAABJRU5ErkJggg==">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Icons (Material Symbols) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <!-- Google Fonts (Sarabun for Thai reports) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Import Map for ES Modules -->
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "uuid": "https://esm.sh/uuid@9.0.1",
+    "papaparse": "https://esm.sh/papaparse@5.4.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/"
+  }
+}
+</script>
+    
+    <!-- Custom Styles (including print styles) -->
+    <style>
+      /* Apply Sarabun font to the whole app if the body has this class */
+      body.lang-th {
+        font-family: 'Sarabun', sans-serif;
+      }
+
+      /* Base style for Google Icons */
+      .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+      }
+      
+      /* Styles for printing */
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+          background-color: #fff !important;
+        }
+        .no-print {
+          display: none !important;
+        }
+        /* Reset layout for printing */
+        main.flex-1 {
+            padding: 0 !important;
+            overflow: visible !important;
+            background-color: transparent !important;
+        }
+        .report-view-container {
+            padding: 0 !important;
+        }
+        /* Ensure the report itself fills the printed page */
+        .printable-container {
+            box-shadow: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            max-width: none !important;
+            width: 100% !important;
+            height: 100% !important;
+            border: none !important;
+            aspect-ratio: auto !important; /* Let content fill the page */
+            min-height: 0 !important;
+            display: flex;
+            flex-direction: column;
+        }
+        .print-page-break {
+          page-break-after: always;
+        }
+
+        /* --- START: Styles to ensure content fits on one page --- */
+
+        /* Reduce font sizes */
+        .printable-container { font-size: 10pt; }
+        .printable-container * { line-height: 1.2; }
+        .printable-container h1 { font-size: 14pt; }
+        .printable-container h3 { font-size: 11pt; }
+        .printable-container p, .printable-container div { font-size: 9pt; }
+        .printable-container table { font-size: 8pt; width: 100%; table-layout: fixed; }
+        .printable-container table .text-xs { font-size: 7pt; }
+
+        /* Reduce spacing */
+        .printable-container header,
+        .printable-container .mb-6 {
+            margin-bottom: 0.5rem !important;
+        }
+        .printable-container .mt-8 {
+            margin-top: 1rem !important;
+        }
+        .printable-container .mt-16 {
+            margin-top: auto !important; /* Push footer to bottom */
+            padding-top: 1rem !important;
+        }
+        .printable-container .pb-4 {
+             padding-bottom: 0.5rem !important;
+        }
+        
+        /* Fine-tune table appearance */
+        .printable-container .overflow-x-auto {
+            flex-grow: 1; /* Allow table to take up available space */
+            min-height: 0;
+        }
+        .printable-container table th,
+        .printable-container table td {
+            padding: 2px 3px !important;
+            height: auto !important; /* Critical to override fixed height */
+            vertical-align: top;
+        }
+        .printable-container .h-24 {
+            height: auto !important; /* Override Tailwind's fixed height */
+        }
+        .printable-container td .p-1, .printable-container td .p-2 {
+            padding: 1px !important;
+        }
+        .printable-container .truncate {
+            white-space: normal; /* Allow text to wrap instead of truncating */
+            word-break: break-word;
+        }
+
+        /* Adjust header logo size */
+        .printable-container header img {
+            height: 40px !important;
+            width: 40px !important;
+        }
+        
+        /* --- END: Styles to ensure content fits on one page --- */
+      }
+
+      /* Make the on-screen preview look like an A4 landscape page */
+      .printable-container {
+        width: 100%;
+        max-width: 1123px; /* A4 landscape width at 96dpi */
+        margin: 0 auto; /* Center horizontally in the available space */
+        padding: 2.5rem;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        background: white;
+        border: 1px solid #e0e0e0;
+        box-sizing: border-box;
+        /* Enforce A4 landscape aspect ratio for the preview */
+        aspect-ratio: 297 / 210;
+      }
+    </style>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <!-- The root element for the React application -->
+    <div id="root"></div>
+    
+    <!-- The entry point for the application -->
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>

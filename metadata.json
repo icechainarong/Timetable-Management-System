@@ -1,0 +1,5 @@
+{
+  "name": "Smart Timetable Management System",
+  "description": "An intelligent web application for creating, managing, and optimizing school timetables with a user-friendly drag-and-drop interface, real-time conflict detection, and comprehensive reporting features.",
+  "requestFramePermissions": []
+}
